@@ -2,7 +2,6 @@
 
 Aplicación web que permite buscar películas, ver detalles y guardar favoritas. Usa la API pública de [OMDB](http://www.omdbapi.com/) y está construida con **Flask**.
 
-![screenshot](https://user-images.githubusercontent.com/your-screenshot.png)
 
 ## 🚀 Funcionalidades
 
