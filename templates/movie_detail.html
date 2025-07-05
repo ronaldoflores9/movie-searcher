@@ -1,0 +1,106 @@
+<!-- templates/movie_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ movie.title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
+      color: #222;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 800px;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+    .poster {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .info p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    .label {
+      font-weight: 600;
+      color: #555;
+    }
+    .error-message {
+      color: #d32f2f;
+      font-size: 0.95rem;
+    }
+    .favorite-button {
+      margin-top: 1.5rem;
+    }
+    .favorite-button button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .favorite-button button:hover {
+      background: #004c99;
+    }
+    .favorite-button form {
+      display: inline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="{{ session.get('last_search_url', url_for('index')) }}">← Volver</a>
+    {% if error %}
+      <p class="error-message">{{ error }}</p>
+    {% elif movie %}
+      <h1>{{ movie.title }} ({{ movie.year }})</h1>
+      {% if movie.poster %}
+        <img class="poster" src="{{ movie.poster }}" alt="Poster de {{ movie.title }}">
+      {% endif %}
+      <div class="info">
+        <p><span class="label">🎬 Género:</span> {{ movie.genre }}</p>
+        <p><span class="label">🎥 Director:</span> {{ movie.director }}</p>
+        <p><span class="label">⭐ Actores:</span> {{ movie.actors }}</p>
+        <p><span class="label">📝 Sinopsis:</span> {{ movie.plot }}</p>
+      </div>
+
+      <div class="favorite-button">
+        {% if movie.imdb_id in session.get('favorites', []) %}
+          <form method="post" action="{{ url_for('remove_from_favorites', imdb_id=movie.imdb_id) }}">
+            <button type="submit">🗑️ Eliminar de Favoritos</button>
+          </form>
+        {% else %}
+          <form method="post" action="{{ url_for('add_to_favorites', imdb_id=movie.imdb_id) }}">
+            <button type="submit">⭐ Agregar a Favoritos</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

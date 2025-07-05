@@ -1,0 +1,113 @@
+<!-- templates/favorites.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Películas Favoritas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .back-button {
+      display: block;
+      margin: 0 auto 2rem auto;
+      text-align: center;
+      text-decoration: none;
+      color: #0066cc;
+      font-size: 0.95rem;
+      width: fit-content;
+    }
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+    .movie-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .movie-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+    .movie-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .movie-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+    .movie-year {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .remove-button {
+      margin-top: 0.7rem;
+      background: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⭐ Mis Películas Favoritas</h1>
+    <a href="{{ url_for('index') }}" class="back-button">← Volver al inicio</a>
+
+    {% if movies %}
+      <div class="movie-grid">
+        {% for movie in movies %}
+          <div class="movie-wrapper">
+            <div class="movie-card">
+              {% if movie.poster %}
+                <a href="{{ url_for('movie_detail', imdb_id=movie.imdb_id) }}">
+                  <img src="{{ movie.poster }}" alt="Poster de {{ movie.title }}">
+                </a>
+              {% endif %}
+              <a href="{{ url_for('movie_detail', imdb_id=movie.imdb_id) }}">
+                <div class="movie-title">{{ movie.title }}</div>
+                <div class="movie-year">{{ movie.year }}</div>
+              </a>
+            </div>
+            <form method="post" action="{{ url_for('remove_from_favorites', imdb_id=movie.imdb_id) }}">
+              <button class="remove-button" type="submit">🗑️ Quitar</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="text-align: center;">No tienes películas favoritas todavía.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
